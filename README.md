@@ -1,6 +1,5 @@
 <div align="center">
-    <img src="icons/icon128.png"
-        title="YTSE" alt="YTSE" width="120" />
+    <img src="icons/icon128.png"/>
     <h1>Quick Tab Switcher</h1>
     <p>
        Effortlessly navigate between tabs with keyboard shortcuts and visual previews
