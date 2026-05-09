@@ -1,0 +1,220 @@
+#tab-switcher-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+#tab-switcher-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 14px !important;
+  padding: 16px !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  max-width: 95vw !important;
+  max-height: 85vh !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  overflow: visible !important;
+}
+
+#tab-switcher-container.single-row {
+  flex-wrap: nowrap !important;
+  gap: 16px !important;
+  padding: 18px !important;
+}
+
+#tab-switcher-container.two-row {
+  flex-wrap: wrap !important;
+  gap: 14px !important;
+  padding: 16px !important;
+  align-content: flex-start !important;
+}
+
+#tab-switcher-container.three-row {
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+  padding: 14px !important;
+  align-content: flex-start !important;
+}
+
+#tab-switcher-container.four-row {
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  padding: 12px !important;
+  align-content: flex-start !important;
+}
+
+.tab-item {
+  width: 160px !important;
+  height: 130px !important;
+  background: white !important;
+  border-radius: 8px !important;
+  padding: 6px !important;
+  cursor: pointer !important;
+  border: 2px solid transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: visible !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+/* Fixed size layouts for non-auto modes */
+#tab-switcher-container.single-row .tab-item {
+  width: 200px !important;
+  height: 150px !important;
+  padding: 8px !important;
+}
+
+#tab-switcher-container.two-row .tab-item {
+  width: 180px !important;
+  height: 140px !important;
+  padding: 7px !important;
+}
+
+.tab-item:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+  z-index: 0 !important;
+}
+
+.tab-item.selected {
+  border: 2px solid #0078d4 !important;
+  box-shadow: 0 4px 16px rgba(0, 120, 212, 0.3) !important;
+}
+
+/* Dark mode styles */
+.dark-mode #tab-switcher-overlay {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+.dark-mode #tab-switcher-container {
+  background: rgba(30, 30, 35, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark-mode .tab-item {
+  background: #2d2d30 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+.dark-mode .tab-item:hover {
+  background: #3a3a3f !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark-mode .tab-item.selected {
+  border: 2px solid #3b82f6 !important;
+  background: #333338 !important;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4) !important;
+}
+
+.dark-mode .tab-item .tab-title {
+  color: #ffffff !important;
+}
+
+.dark-mode .tab-item .tab-url {
+  color: #a1a1aa !important;
+}
+
+.dark-mode .tab-item .tab-status {
+  color: #71717a !important;
+}
+
+.tab-item.selected::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -4px !important;
+  left: -4px !important;
+  right: -4px !important;
+  bottom: -4px !important;
+  border-radius: 12px !important;
+  z-index: 1 !important;
+}
+
+/* Dynamic highlight color will be applied via JavaScript */
+
+.tab-item .tab-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-bottom: 8px !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid #eee !important;
+}
+
+.tab-item .tab-favicon {
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+}
+
+.tab-item .tab-title {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #333 !important;
+  flex: 1 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.tab-item .tab-preview {
+  flex: 1 !important;
+  background: #f5f5f5 !important;
+  border-radius: 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 11px !important;
+  color: #666 !important;
+  text-align: center !important;
+  padding: 8px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.tab-item .tab-preview::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: linear-gradient(135deg, #f5f5f5 25%, transparent 25%, transparent 75%, #f5f5f5 75%, #f5f5f5), 
+              linear-gradient(135deg, #f5f5f5 25%, transparent 25%, transparent 75%, #f5f5f5 75%, #f5f5f5) !important;
+  background-size: 10px 10px !important;
+  background-position: 0 0, 5px 5px !important;
+  opacity: 0.3 !important;
+}
+
+
+/* Scrollbar styling for horizontal scrolling */
+#tab-switcher-container::-webkit-scrollbar {
+  height: 8px !important;
+}
+
+#tab-switcher-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 4px !important;
+}
+
+#tab-switcher-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-radius: 4px !important;
+}
+
+#tab-switcher-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5) !important;
+}

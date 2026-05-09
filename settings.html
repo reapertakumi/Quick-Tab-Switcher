@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Tab Switcher Settings</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 20px;
+            background-color: #222222;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        .setting-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: white;
+        }
+        select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        .save-btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 20px;
+        }
+        .save-btn:hover {
+            background-color: #2563eb;
+        }
+        .status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        .status.success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        /* Toggle switch styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #3b82f6;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tab Switcher Settings</h1>
+        
+        <div class="setting-group">
+            <label for="tabCount">Number of tabs to display:</label>
+            <select id="tabCount">
+                <option value="4">4 Tabs</option>
+                <option value="5">5 Tabs</option>
+                <option value="6">6 Tabs</option>
+                <option value="7">7 Tabs</option>
+                <option value="8">8 Tabs</option>
+                <option value="9">9 Tabs</option>
+                <option value="10">10 Tabs</option>
+                <option value="11">11 Tabs</option>
+                <option value="12">12 Tabs</option>
+                <option value="auto">Auto (Fit to Screen)</option>
+            </select>
+        </div>
+        
+        <div class="setting-group">
+            <label for="previewToggle">Enable tab previews:</label>
+            <label class="switch">
+                <input type="checkbox" id="previewToggle" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        
+        <div class="setting-group">
+            <label for="highlightColor">Highlight color:</label>
+            <select id="highlightColor">
+                <option value="#3b82f6">Blue</option>
+                <option value="#ef4444">Red</option>
+                <option value="#10b981">Green</option>
+                <option value="#f59e0b">Yellow</option>
+                <option value="#8b5cf6">Purple</option>
+                <option value="#ec4899">Pink</option>
+                <option value="#14b8a6">Teal</option>
+                <option value="#f97316">Orange</option>
+            </select>
+        </div>
+        
+        <div class="setting-group">
+            <label for="theme">Theme:</label>
+            <select id="theme">
+                <option value="system">System (Auto)</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </select>
+        </div>
+        
+        <button class="save-btn" id="saveBtn">Save Settings</button>
+        <div class="status" id="status">Settings saved successfully!</div>
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+</html>
