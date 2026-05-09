@@ -769,8 +769,6 @@ function detectScreenCategory(width, height) {
   const pixelRatio = window.devicePixelRatio || 1;
   const adjustedDiagonal = diagonalPixels * pixelRatio;
   
-  if (adjustedDiagonal < 800) return 'mobile';
-  if (adjustedDiagonal < 1200) return 'tablet';
   if (adjustedDiagonal < 2000) return 'desktop';
   if (adjustedDiagonal < 3000) return 'large-desktop';
   return '4k-desktop';
@@ -797,13 +795,11 @@ function getPerformanceProfile() {
 }
 
 function getBaseTabDimensions(screenCategory, pixelRatio) {
-  // Base dimensions for different screen categories (optimized for multi-row)
+  // Base dimensions for different screen categories (desktop only)
   const baseSizes = {
-    'mobile': { width: 120, height: 100, gap: 10 },
-    'tablet': { width: 140, height: 120, gap: 12 },
-    'desktop': { width: 160, height: 130, gap: 14 },
-    'large-desktop': { width: 180, height: 140, gap: 16 },
-    '4k-desktop': { width: 200, height: 150, gap: 18 }
+    'desktop': { width: 180, height: 130, gap: 14 },
+    'large-desktop': { width: 200, height: 140, gap: 16 },
+    '4k-desktop': { width: 220, height: 150, gap: 18 }
   };
   
   const base = baseSizes[screenCategory] || baseSizes['desktop'];
@@ -821,20 +817,6 @@ const scaleFactor = Math.max(0.8, Math.min(1.5, 1 / (pixelRatio * 0.8)));
 function getLayoutConstraints(screenCategory, aspectRatio) {
   // Define constraints based on screen category and aspect ratio
   const constraints = {
-    'mobile': {
-      horizontalPadding: 30,
-      verticalPadding: 100,
-      maxRows: 3,
-      maxTabsPerRow: 2,
-      minTabs: 3
-    },
-    'tablet': {
-      horizontalPadding: 40,
-      verticalPadding: 120,
-      maxRows: 3,
-      maxTabsPerRow: 3,
-      minTabs: 4
-    },
     'desktop': {
       horizontalPadding: 50,
       verticalPadding: 140,

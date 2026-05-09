@@ -103,8 +103,8 @@ async function captureScreenshot(tabId, windowId) {
     if (!tab || isRestrictedUrl(tab.url)) return;
 
     const dataUrl = await chrome.tabs.captureVisibleTab(windowId, {
-      format: 'jpeg',
-      quality: 50
+      format: 'webp',
+      quality: 80
     });
     await setScreenshot(tabId, dataUrl, tab.url);
   } catch (error) {
@@ -317,6 +317,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // Open options page when extension icon is clicked
 chrome.action.onClicked.addListener(() => {
   chrome.runtime.openOptionsPage();
+});
+
+// Open settings page on first install
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'install') {
+    chrome.runtime.openOptionsPage();
+  }
 });
 
 // Initialize MRU list when extension loads

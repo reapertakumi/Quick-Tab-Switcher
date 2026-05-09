@@ -5,11 +5,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const themeSelect = document.getElementById('theme');
     const saveBtn = document.getElementById('saveBtn');
     const status = document.getElementById('status');
+    const hotkeyDisplay = document.getElementById('hotkeyDisplay');
+    
+    // Hotkey click handler
+    hotkeyDisplay.addEventListener('click', function(e) {
+        e.preventDefault();
+        chrome.tabs.create({url: 'chrome://extensions/shortcuts'});
+    });
 
     // Load current settings
     chrome.storage.sync.get(['maxTabs', 'previewEnabled', 'highlightColor', 'theme'], function(result) {
         if (result.maxTabs) {
             tabCountSelect.value = result.maxTabs;
+        } else {
+            tabCountSelect.value = '12'; // Default to 12 tabs
         }
         if (result.previewEnabled !== undefined) {
             previewToggle.checked = result.previewEnabled;

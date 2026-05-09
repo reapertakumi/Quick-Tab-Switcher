@@ -54,7 +54,7 @@
 }
 
 .tab-item {
-  width: 160px !important;
+  width: 180px !important;
   height: 130px !important;
   background: white !important;
   border-radius: 8px !important;
@@ -71,13 +71,13 @@
 
 /* Fixed size layouts for non-auto modes */
 #tab-switcher-container.single-row .tab-item {
-  width: 200px !important;
+  width: 220px !important;
   height: 150px !important;
   padding: 8px !important;
 }
 
 #tab-switcher-container.two-row .tab-item {
-  width: 180px !important;
+  width: 200px !important;
   height: 140px !important;
   padding: 7px !important;
 }
