@@ -1,3 +1,25 @@
+/* Quick Tab Switcher styles */
+
+/* Scale custom property - set dynamically via JS */
+:host {
+  --tab-scale: 1;
+}
+
+/* Reset inherited properties so host page styles don't leak through shadow DOM */
+#tab-switcher-overlay {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  letter-spacing: normal !important;
+  word-spacing: normal !important;
+  text-transform: none !important;
+}
+
+#tab-switcher-overlay,
+#tab-switcher-container,
+.tab-item,
+.tab-item * {
+  color: inherit !important;
+}
+
 #tab-switcher-overlay {
   position: fixed !important;
   top: 0 !important;
@@ -14,51 +36,52 @@
 #tab-switcher-container {
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 14px !important;
-  padding: 16px !important;
+  gap: calc(14px * var(--tab-scale)) !important;
+  padding: calc(16px * var(--tab-scale)) !important;
   background: rgba(0, 0, 0, 0.8) !important;
-  border-radius: 12px !important;
+  border-radius: calc(12px * var(--tab-scale)) !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
   max-width: 95vw !important;
-  max-height: 85vh !important;
+  max-height: calc(750px * var(--tab-scale)) !important;
   justify-content: center !important;
   align-items: flex-start !important;
-  overflow: visible !important;
+  overflow-y: auto !important;
+  scroll-behavior: smooth !important;
 }
 
 #tab-switcher-container.single-row {
   flex-wrap: nowrap !important;
-  gap: 16px !important;
-  padding: 18px !important;
+  gap: calc(16px * var(--tab-scale)) !important;
+  padding: calc(18px * var(--tab-scale)) !important;
 }
 
 #tab-switcher-container.two-row {
   flex-wrap: wrap !important;
-  gap: 14px !important;
-  padding: 16px !important;
+  gap: calc(14px * var(--tab-scale)) !important;
+  padding: calc(16px * var(--tab-scale)) !important;
   align-content: flex-start !important;
 }
 
 #tab-switcher-container.three-row {
   flex-wrap: wrap !important;
-  gap: 12px !important;
-  padding: 14px !important;
+  gap: calc(12px * var(--tab-scale)) !important;
+  padding: calc(14px * var(--tab-scale)) !important;
   align-content: flex-start !important;
 }
 
 #tab-switcher-container.four-row {
   flex-wrap: wrap !important;
-  gap: 10px !important;
-  padding: 12px !important;
+  gap: calc(10px * var(--tab-scale)) !important;
+  padding: calc(12px * var(--tab-scale)) !important;
   align-content: flex-start !important;
 }
 
 .tab-item {
-  width: 180px !important;
-  height: 130px !important;
+  width: calc(180px * var(--tab-scale)) !important;
+  height: calc(130px * var(--tab-scale)) !important;
   background: white !important;
-  border-radius: 8px !important;
-  padding: 6px !important;
+  border-radius: calc(8px * var(--tab-scale)) !important;
+  padding: calc(6px * var(--tab-scale)) !important;
   cursor: pointer !important;
   border: 2px solid transparent !important;
   display: flex !important;
@@ -71,19 +94,19 @@
 
 /* Fixed size layouts for non-auto modes */
 #tab-switcher-container.single-row .tab-item {
-  width: 220px !important;
-  height: 150px !important;
-  padding: 8px !important;
+  width: calc(220px * var(--tab-scale)) !important;
+  height: calc(150px * var(--tab-scale)) !important;
+  padding: calc(8px * var(--tab-scale)) !important;
 }
 
 #tab-switcher-container.two-row .tab-item {
-  width: 200px !important;
-  height: 140px !important;
-  padding: 7px !important;
+  width: calc(200px * var(--tab-scale)) !important;
+  height: calc(140px * var(--tab-scale)) !important;
+  padding: calc(7px * var(--tab-scale)) !important;
 }
 
 .tab-item:hover {
-  transform: translateY(-2px) !important;
+  transform: translateY(calc(-2px * var(--tab-scale))) !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
   z-index: 0 !important;
 }
@@ -135,33 +158,16 @@
 .tab-item.selected::before {
   content: '' !important;
   position: absolute !important;
-  top: -4px !important;
-  left: -4px !important;
-  right: -4px !important;
-  bottom: -4px !important;
-  border-radius: 12px !important;
+  top: calc(-4px * var(--tab-scale)) !important;
+  left: calc(-4px * var(--tab-scale)) !important;
+  right: calc(-4px * var(--tab-scale)) !important;
+  bottom: calc(-4px * var(--tab-scale)) !important;
+  border-radius: calc(12px * var(--tab-scale)) !important;
   z-index: 1 !important;
 }
 
-/* Dynamic highlight color will be applied via JavaScript */
-
-.tab-item .tab-header {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  margin-bottom: 8px !important;
-  padding-bottom: 8px !important;
-  border-bottom: 1px solid #eee !important;
-}
-
-.tab-item .tab-favicon {
-  width: 16px !important;
-  height: 16px !important;
-  flex-shrink: 0 !important;
-}
-
 .tab-item .tab-title {
-  font-size: 12px !important;
+  font-size: calc(12px * var(--tab-scale)) !important;
   font-weight: 500 !important;
   color: #333 !important;
   flex: 1 !important;
@@ -170,51 +176,172 @@
   white-space: nowrap !important;
 }
 
-.tab-item .tab-preview {
-  flex: 1 !important;
-  background: #f5f5f5 !important;
-  border-radius: 4px !important;
-  display: flex !important;
+.tab-item .tab-url {
+  font-size: calc(10px * var(--tab-scale)) !important;
+  word-break: break-all !important;
+  text-align: center !important;
+  line-height: 1.3 !important;
+}
+
+.tab-item .tab-status {
+  font-size: calc(9px * var(--tab-scale)) !important;
+  text-align: center !important;
+  margin-top: calc(2px * var(--tab-scale)) !important;
+}
+
+/* Close button */
+.tab-item .tab-close {
+  position: absolute !important;
+  top: calc(4px * var(--tab-scale)) !important;
+  right: calc(4px * var(--tab-scale)) !important;
+  width: calc(20px * var(--tab-scale)) !important;
+  height: calc(20px * var(--tab-scale)) !important;
+  border-radius: 50% !important;
+  border: none !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  color: #fff !important;
+  font-size: calc(12px * var(--tab-scale)) !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  display: none !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 11px !important;
-  color: #666 !important;
-  text-align: center !important;
-  padding: 8px !important;
-  position: relative !important;
-  overflow: hidden !important;
+  padding: 0 !important;
+  z-index: 10 !important;
+  opacity: 0.8 !important;
+  transition: opacity 0.15s ease, background 0.15s ease !important;
 }
 
-.tab-item .tab-preview::before {
-  content: '' !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  background: linear-gradient(135deg, #f5f5f5 25%, transparent 25%, transparent 75%, #f5f5f5 75%, #f5f5f5), 
-              linear-gradient(135deg, #f5f5f5 25%, transparent 25%, transparent 75%, #f5f5f5 75%, #f5f5f5) !important;
-  background-size: 10px 10px !important;
-  background-position: 0 0, 5px 5px !important;
-  opacity: 0.3 !important;
+.tab-item .tab-close:hover {
+  background: rgba(239, 68, 68, 0.9) !important;
+  opacity: 1 !important;
 }
 
+.tab-item:hover .tab-close {
+  display: flex !important;
+}
 
-/* Scrollbar styling for horizontal scrolling */
+.dark-mode .tab-item .tab-close {
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+.dark-mode .tab-item .tab-close:hover {
+  background: rgba(239, 68, 68, 0.9) !important;
+}
+
+/* Scrollbar styling */
 #tab-switcher-container::-webkit-scrollbar {
-  height: 8px !important;
+  width: 10px !important;
+  height: 10px !important;
 }
 
 #tab-switcher-container::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.1) !important;
-  border-radius: 4px !important;
+  border-radius: 5px !important;
 }
 
 #tab-switcher-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3) !important;
-  border-radius: 4px !important;
+  background: rgba(255, 255, 255, 0.4) !important;
+  border-radius: 5px !important;
 }
 
 #tab-switcher-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5) !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Search bar */
+#tab-search-bar {
+  position: absolute !important;
+  top: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 1000000 !important;
+  display: none;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+  min-width: 280px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+#tab-search-bar input {
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  font-size: 14px !important;
+  width: 100% !important;
+  color: #333 !important;
+  font-family: inherit !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.dark-mode #tab-search-bar {
+  background: rgba(45, 45, 48, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.dark-mode #tab-search-bar input {
+  color: #ffffff !important;
+}
+
+/* Bookmarks search bar */
+#bookmarks-search-bar {
+  position: absolute !important;
+  top: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 1000000 !important;
+  display: none;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+  min-width: 280px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+#bookmarks-search-bar input {
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  font-size: 14px !important;
+  width: 100% !important;
+  color: #333 !important;
+  font-family: inherit !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.dark-mode #bookmarks-search-bar {
+  background: rgba(45, 45, 48, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.dark-mode #bookmarks-search-bar input {
+  color: #ffffff !important;
+}
+
+/* Bookmark path display */
+.bookmark-path {
+  color: #6b7280 !important;
+}
+
+.dark-mode .bookmark-path {
+  color: #9ca3af !important;
+}
+
+/* Compact mode (search results - no preview) */
+.tab-item.compact {
+  height: auto !important;
+  min-height: calc(60px * var(--tab-scale)) !important;
+  padding: calc(8px * var(--tab-scale)) !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+.tab-item.compact .tab-title {
+  font-size: calc(14px * var(--tab-scale)) !important;
+  margin-bottom: 0 !important;
 }

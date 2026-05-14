@@ -77,6 +77,15 @@ function getScreenshot(tabId, url = null) {
   return null;
 }
 
+function isInternalPage(url = '') {
+  return url.startsWith('chrome://') ||
+         url.startsWith('brave://') ||
+         url.startsWith('helium://') ||
+         url.startsWith('edge://') ||
+         url.startsWith('vivaldi://') ||
+         url.startsWith('about:');
+}
+
 function isRestrictedUrl(url = '') {
   return url.startsWith('chrome://') ||
          url.startsWith('chrome-extension://') ||
@@ -103,7 +112,7 @@ async function captureScreenshot(tabId, windowId) {
     if (!tab || isRestrictedUrl(tab.url)) return;
 
     const dataUrl = await chrome.tabs.captureVisibleTab(windowId, {
-      format: 'webp',
+      format: 'jpeg',
       quality: 80
     });
     await setScreenshot(tabId, dataUrl, tab.url);
@@ -205,11 +214,20 @@ async function toggleTabSwitcher(direction = "forward") {
       return;
     }
     
+    // Get hideInternalPages setting
+    const settings = await chrome.storage.sync.get(['tabSwitcherSettings']);
+    const hideInternalPages = settings.tabSwitcherSettings?.hideInternalPages || false;
+    
     const allTabs = await chrome.tabs.query({ currentWindow: true });
     const sortedTabs = sortTabsByMRU(allTabs);
     
+    // Filter out internal pages if setting is enabled
+    const filteredTabs = hideInternalPages
+      ? sortedTabs.filter(tab => !isInternalPage(tab.url))
+      : sortedTabs;
+    
     // Optimization: Only send top 20 tabs to avoid massive payload with screenshots
-    const tabsToSend = sortedTabs.slice(0, 20);
+    const tabsToSend = filteredTabs.slice(0, 20);
     
     // Attach cached screenshots to tabs
     const tabsWithScreenshots = tabsToSend.map(t => ({
@@ -236,6 +254,40 @@ chrome.commands.onCommand.addListener(async (command) => {
   console.log('Command received:', command);
   if (command === 'toggle-tab-switcher') {
     toggleTabSwitcher("forward"); // Ctrl+Shift+Q opens switcher going forward
+  } else if (command === 'search-mode') {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab) return;
+    try {
+      await chrome.tabs.sendMessage(tab.id, { action: 'openDirectSearch' });
+    } catch (e) {
+      // Content script not loaded; inject and retry once
+      try {
+        await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: ['content.js']
+        });
+        await chrome.tabs.sendMessage(tab.id, { action: 'openDirectSearch' });
+      } catch (injectErr) {
+        console.error('Failed to open direct search:', injectErr);
+      }
+    }
+  } else if (command === 'bookmarks-mode') {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab) return;
+    try {
+      await chrome.tabs.sendMessage(tab.id, { action: 'openDirectBookmarks' });
+    } catch (e) {
+      // Content script not loaded; inject and retry once
+      try {
+        await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: ['content.js']
+        });
+        await chrome.tabs.sendMessage(tab.id, { action: 'openDirectBookmarks' });
+      } catch (injectErr) {
+        console.error('Failed to open direct bookmarks:', injectErr);
+      }
+    }
   }
 });
 
@@ -289,15 +341,72 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .then(() => sendResponse({ success: true }))
       .catch(error => sendResponse({ success: false, error: error.message }));
     return true;
-  } else if (request.action === "getAllTabs") {
-    chrome.tabs.query({ currentWindow: true })
-      .then(tabs => sendResponse({ tabs: tabs }))
-      .catch(error => sendResponse({ tabs: [], error: error.message }));
+  } else if (request.action === "closeTab") {
+    chrome.tabs.remove(request.tabId)
+      .then(() => sendResponse({ success: true }))
+      .catch(error => sendResponse({ success: false, error: error.message }));
+    return true;
+  } else if (request.action === "openBookmark") {
+    chrome.tabs.create({ url: request.url })
+      .then((tab) => sendResponse({ success: true, tabId: tab.id }))
+      .catch(error => sendResponse({ success: false, error: error.message }));
     return true;
   } else if (request.action === "switcherShown") {
     // Switcher is now visible - don't capture screenshots
     switcherVisible = true;
     sendResponse({ success: true });
+  } else if (request.action === "getAllTabs") {
+    // Get all tabs and current tab for direct search
+    chrome.storage.sync.get(['tabSwitcherSettings'], (result) => {
+      const settings = result.tabSwitcherSettings || {};
+      const hideInternalPages = settings.hideInternalPages || false;
+      
+      chrome.tabs.query({}, (tabs) => {
+        // Filter out internal pages if setting is enabled
+        let filteredTabs = tabs;
+        if (hideInternalPages) {
+          filteredTabs = tabs.filter(tab => !isInternalPage(tab.url));
+        }
+        
+        chrome.tabs.query({ active: true, currentWindow: true }, (currentTab) => {
+          const currentTabId = currentTab.length > 0 ? currentTab[0].id : null;
+          sendResponse({ 
+            tabs: filteredTabs,
+            currentTabId: currentTabId
+          });
+        });
+      });
+    });
+    return true;
+  } else if (request.action === "getAllBookmarks") {
+    // Get all bookmarks tree
+    chrome.bookmarks.getTree((bookmarkTree) => {
+      const bookmarks = [];
+      
+      function flattenBookmarks(nodes, path = []) {
+        for (const node of nodes) {
+          if (node.url) {
+            const folderPath = path.join('/') || 'Bookmarks';
+            bookmarks.push({
+              id: node.id,
+              title: node.title || node.url,
+              url: node.url,
+              path: folderPath,
+              pathArray: [...path]
+            });
+          }
+          if (node.children) {
+            // Only include folders that contain bookmarks
+            const childPath = [...path, node.title || 'Folder'];
+            flattenBookmarks(node.children, childPath);
+          }
+        }
+      }
+      
+      flattenBookmarks(bookmarkTree);
+      sendResponse({ bookmarks: bookmarks });
+    });
+    return true;
   } else if (request.action === "switcherHidden") {
     // Switcher is now hidden - can capture screenshots again
     switcherVisible = false;

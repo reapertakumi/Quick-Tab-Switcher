@@ -7,7 +7,11 @@
     "activeTab",
     "tabs",
     "scripting",
-    "storage"
+    "storage",
+    "bookmarks"
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "background.js"
@@ -36,15 +40,20 @@
   "commands": {
     "toggle-tab-switcher": {
       "suggested_key": {
-        "default": "Ctrl+Shift+Q",
-        "mac": "Command+Shift+Q"
+        "default": "Alt+Q"
       },
       "description": "Toggle Tab Switcher"
+    },
+    "search-mode": {
+      "description": "Search Mode"
+    },
+    "bookmarks-mode": {
+      "description": "Bookmarks Mode"
     }
   },
   "web_accessible_resources": [
     {
-      "resources": ["tab-switcher.js"],
+      "resources": ["styles.css"],
       "matches": ["<all_urls>"]
     }
   ]
