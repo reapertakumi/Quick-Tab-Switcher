@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Quick Tab Switcher",
+  "name": "Visual Tab Switcher",
   "version": "0.1",
   "description": "Effortlessly navigate between tabs with keyboard shortcuts and visual previews",
   "permissions": [
